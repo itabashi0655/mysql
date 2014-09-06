@@ -22,7 +22,11 @@ if [ -z "$(ls -A /var/lib/mysql)" -a "${1%_safe}" = 'mysqld' ]; then
 	EOSQL
 	
 	if [ "$MYSQL_DATABASE" ]; then
-		echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE ;" >> "$TEMP_FILE"
+        if [ "$MYSQL_CHARSET" ]; then
+            echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE CHARACTER SET $MYSQL_CHARSET ;" >> "$TEMP_FILE"
+        else
+            echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE ;" >> "$TEMP_FILE"
+        fi
 	fi
 	
 	if [ "$MYSQL_USER" -a "$MYSQL_PASSWORD" ]; then
